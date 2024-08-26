@@ -1,5 +1,6 @@
 package com.sparta.schedule.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.schedule.dto.CommentRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class Comment extends Timestamped{
 
     @ManyToOne
     @JoinColumn(name = "schedule")
+    @JsonIgnore
     private Schedule schedule;
 
     public Comment(CommentRequestDto commentRequestDto){

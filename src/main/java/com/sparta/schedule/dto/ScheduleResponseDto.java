@@ -1,7 +1,10 @@
 package com.sparta.schedule.dto;
 
+import com.sparta.schedule.entity.Comment;
 import com.sparta.schedule.entity.Schedule;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class ScheduleResponseDto {
@@ -9,6 +12,8 @@ public class ScheduleResponseDto {
     private String username;
     private String todoTitle;
     private String todoContents;
+    private int commentCount;
+    private List<Comment> commentList;
 
 
     public ScheduleResponseDto(ScheduleRequestDto scheduleRequestDto) {
@@ -21,7 +26,9 @@ public class ScheduleResponseDto {
     public ScheduleResponseDto(Schedule schedule) {
         this.scheduleId = schedule.getScheduleId();
         this.username = schedule.getUsername();
+        this.commentCount = schedule.getCommentCount();
         this.todoTitle = schedule.getTodoTitle();
         this.todoContents = schedule.getTodoContents();
+        this.commentList = schedule.getCommentList();
     }
 }

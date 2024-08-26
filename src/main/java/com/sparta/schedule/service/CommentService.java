@@ -6,10 +6,6 @@ import com.sparta.schedule.entity.Comment;
 import com.sparta.schedule.entity.Schedule;
 import com.sparta.schedule.repository.CommentRepository;
 import com.sparta.schedule.repository.ScheduleRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +28,8 @@ public class CommentService {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(()-> new IllegalArgumentException("선택한 스케줄이 존재하지 않습니다."));
         comment.setSchedule(schedule);
         Comment saveComment = commentRepository.save(comment);
+
+        schedule.addCommentList(saveComment);
         CommentResponseDto commentResponseDto = new CommentResponseDto(saveComment);
         return commentResponseDto;
     }
@@ -46,9 +44,11 @@ public class CommentService {
         return commentRequestDto;
     }
 
+
     public Comment findComment(Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException("선택한 id가 존재하지 않습니다."));
     }
+
 
     @Transactional
     public CommentResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto) {
