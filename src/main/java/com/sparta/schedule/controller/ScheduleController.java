@@ -35,7 +35,12 @@ public class ScheduleController {
     }
 
     @PutMapping("/schedule/{scheduleId}")
-    public  ScheduleResponseDto updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto scheduleRequestDto){
+    public ScheduleResponseDto updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto scheduleRequestDto){
         return scheduleService.updateSchedule(scheduleId, scheduleRequestDto);
+    }
+
+    @DeleteMapping("/schedule/{scheduleId}")
+    public Long delete(@PathVariable Long scheduleId){
+        return scheduleService.deleteSchedule(scheduleId);
     }
 }

@@ -57,4 +57,10 @@ public class CommentService {
         CommentResponseDto commentResponseDto = new CommentResponseDto(updateComment);
         return commentResponseDto;
     }
+
+    public Long deleteComment(Long commentId) {
+        Comment comment = findComment(commentId);
+        commentRepository.delete(comment);
+        return commentId;
+    }
 }

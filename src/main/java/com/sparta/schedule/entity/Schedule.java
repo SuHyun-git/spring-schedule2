@@ -32,7 +32,7 @@ public class Schedule extends Timestamped{
     @Column(name = "commentCount")
     private int commentCount;
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     private List<Comment> commentList = new ArrayList<>();
 
