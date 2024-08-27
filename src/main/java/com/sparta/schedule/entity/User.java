@@ -29,9 +29,9 @@ public class User extends Timestamped {
     @Column(name = "email", length = 100, unique = true)
     private String email;
 
-//    @Column(nullable = false, unique = true)
-//    @Enumerated(value = EnumType.STRING)
-//    private UserRoleEnum role;
+    @Column(nullable = false, unique = true)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore

@@ -9,4 +9,6 @@ public class UserRequestDto {
     private String password;
     private String userName;
     private String email;
+    private boolean admin = false;
+    private String adminToken = "";
 }
