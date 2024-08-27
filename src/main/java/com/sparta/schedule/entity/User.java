@@ -23,8 +23,15 @@ public class User extends Timestamped {
     @Column(name = "userName", length = 100)
     private String userName;
 
-    @Column(name = "email", length = 100)
+    @Column(nullable = false)
+    private String password;
+
+    @Column(name = "email", length = 100, unique = true)
     private String email;
+
+//    @Column(nullable = false, unique = true)
+//    @Enumerated(value = EnumType.STRING)
+//    private UserRoleEnum role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
