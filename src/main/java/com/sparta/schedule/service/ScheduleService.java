@@ -3,7 +3,11 @@ package com.sparta.schedule.service;
 import com.sparta.schedule.dto.ScheduleRequestDto;
 import com.sparta.schedule.dto.ScheduleResponseDto;
 import com.sparta.schedule.entity.Schedule;
+import com.sparta.schedule.entity.User;
+import com.sparta.schedule.entity.UserSchedule;
 import com.sparta.schedule.repository.ScheduleRepository;
+import com.sparta.schedule.repository.UserRepository;
+import com.sparta.schedule.repository.UserScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,11 +21,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
+    private final UserScheduleRepository userScheduleRepository;
 
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto) {
+
+    public ScheduleResponseDto createSchedule(Long userId, ScheduleRequestDto scheduleRequestDto) {
+        // schedule 생성하고 Dto 정보를 저장
         Schedule schedule = new Schedule(scheduleRequestDto);
         Schedule saveSchedule = scheduleRepository.save(schedule);
-        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(scheduleRequestDto);
+
+        // user를 userId로 찾은 뒤 user에 저장
+        User user = userRepository.findById(userId).orElseThrow(()-> new IllegalArgumentException("찾는 id가 존재하지 않습니다."));
+
+        // userschedule과 User, Schedule에 각각 저장하기
+        UserSchedule userSchedule = new UserSchedule(user, schedule);
+        userScheduleRepository.save(userSchedule);
+        user.addUserScheduleList(userSchedule);
+        saveSchedule.addUserScheduleList(userSchedule);
+
+        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(saveSchedule);
         return scheduleResponseDto;
     }
 

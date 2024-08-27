@@ -39,7 +39,7 @@ public class CommentService {
     }
 
     public CommentResponseDto findOneComment(Long commentId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException("선택한 id가 존재하지 않습니다."));
+        Comment comment = findComment(commentId);
         CommentResponseDto commentRequestDto = new CommentResponseDto(comment);
         return commentRequestDto;
     }

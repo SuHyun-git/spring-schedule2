@@ -20,9 +20,6 @@ public class Schedule extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scheduleId;
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
-
     @Column(name="todoTitle", length = 100)
     private String todoTitle;
 
@@ -36,20 +33,28 @@ public class Schedule extends Timestamped{
     @JsonIgnore
     private List<Comment> commentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "schedule")
+    @JsonIgnore
+    private List<UserSchedule> userScheduleList = new ArrayList<>();
+
+
     public void addCommentList(Comment comment){
         this.commentList.add(comment);
         comment.setSchedule(this);
     }
 
+    public void addUserScheduleList(UserSchedule userSchedule){
+        this.userScheduleList.add(userSchedule);
+        userSchedule.setSchedule(this);
+    }
+
     public Schedule(ScheduleRequestDto scheduleRequestDto) {
         this.scheduleId = scheduleRequestDto.getScheduleId();
-        this.username = scheduleRequestDto.getUsername();
         this.todoTitle = scheduleRequestDto.getTodoTitle();
         this.todoContents = scheduleRequestDto.getTodoContents();
     }
 
     public Schedule update(ScheduleRequestDto scheduleRequestDto) {
-        this.username = scheduleRequestDto.getUsername();
         this.todoTitle = scheduleRequestDto.getTodoTitle();
         this.todoContents = scheduleRequestDto.getTodoContents();
         return this;

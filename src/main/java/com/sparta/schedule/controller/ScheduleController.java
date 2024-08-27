@@ -16,9 +16,9 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    @PostMapping("/schedule")
-    public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.createSchedule(scheduleRequestDto);
+    @PostMapping("/schedule/{userId}")
+    public ScheduleResponseDto createSchedule(@PathVariable Long userId, @RequestBody ScheduleRequestDto scheduleRequestDto) {
+        return scheduleService.createSchedule(userId, scheduleRequestDto);
     }
 
     @GetMapping("/schedule/{scheduleId}")
@@ -38,6 +38,10 @@ public class ScheduleController {
     public ScheduleResponseDto updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto scheduleRequestDto){
         return scheduleService.updateSchedule(scheduleId, scheduleRequestDto);
     }
+
+    // 일정을 작성한 유저는 추가로 일정 담당 유저들을 배치 할 수 있음으로
+//    @PutMapping("/schedule/{scheduleId}")
+
 
     @DeleteMapping("/schedule/{scheduleId}")
     public Long delete(@PathVariable Long scheduleId){

@@ -9,7 +9,6 @@ import java.util.List;
 @Getter
 public class ScheduleResponseDto {
     private Long scheduleId;
-    private String username;
     private String todoTitle;
     private String todoContents;
     private int commentCount;
@@ -18,14 +17,12 @@ public class ScheduleResponseDto {
 
     public ScheduleResponseDto(ScheduleRequestDto scheduleRequestDto) {
         this.scheduleId = scheduleRequestDto.getScheduleId();
-        this.username = scheduleRequestDto.getUsername();
         this.todoTitle = scheduleRequestDto.getTodoTitle();
         this.todoContents = scheduleRequestDto.getTodoContents();
     }
 
     public ScheduleResponseDto(Schedule schedule) {
         this.scheduleId = schedule.getScheduleId();
-        this.username = schedule.getUsername();
         this.commentCount = schedule.getCommentCount();
         this.todoTitle = schedule.getTodoTitle();
         this.todoContents = schedule.getTodoContents();

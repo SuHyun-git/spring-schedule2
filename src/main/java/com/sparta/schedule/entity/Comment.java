@@ -24,7 +24,7 @@ public class Comment extends Timestamped{
     private String contents;
 
     @ManyToOne
-    @JoinColumn(name = "schedule")
+    @JoinColumn(name = "schedule_id")
     @JsonIgnore
     private Schedule schedule;
 
