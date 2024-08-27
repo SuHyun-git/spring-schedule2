@@ -5,6 +5,7 @@ import com.sparta.schedule.dto.ScheduleResponseDto;
 import com.sparta.schedule.dto.UserScheduleResponseDto;
 import com.sparta.schedule.entity.Schedule;
 import com.sparta.schedule.entity.User;
+import com.sparta.schedule.entity.UserRoleEnum;
 import com.sparta.schedule.entity.UserSchedule;
 import com.sparta.schedule.repository.ScheduleRepository;
 import com.sparta.schedule.repository.UserRepository;
@@ -82,21 +83,31 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto scheduleRequestDto) {
-        Schedule schedule = findSchedule(id);
-        Schedule updateSchedule = schedule.update(scheduleRequestDto);
-        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(updateSchedule);
-        return scheduleResponseDto;
+    public String updateSchedule(Long id, Long userId, ScheduleRequestDto scheduleRequestDto) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("user id를 잘못 입력하였습니다."));
+        if(user.getRole() == UserRoleEnum.ADMIN) {
+            Schedule schedule = findSchedule(id);
+            Schedule updateSchedule = schedule.update(scheduleRequestDto);
+            ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(updateSchedule);
+            return "수정 완료";
+        } else {
+            return "권한이 없습니다.";
+        }
     }
 
     public Schedule findSchedule(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("선택한 스케줄이 존재하지 않습니다."));
     }
 
-    public Long deleteSchedule(Long scheduleId) {
-        Schedule schedule = findSchedule(scheduleId);
-        scheduleRepository.delete(schedule);
-        return scheduleId;
+    public String deleteSchedule(Long scheduleId, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("user id를 잘못 입력하였습니다."));
+        if(user.getRole() == UserRoleEnum.ADMIN) {
+            Schedule schedule = findSchedule(scheduleId);
+            scheduleRepository.delete(schedule);
+            return "삭제 완료";
+        } else {
+            return "권한이 없습니다.";
+        }
     }
 
     public UserScheduleResponseDto addUserInSchedule(Long userId, Long scheduleId, Long addUserId) {

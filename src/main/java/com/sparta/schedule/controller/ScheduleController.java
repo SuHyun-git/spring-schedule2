@@ -35,9 +35,9 @@ public class ScheduleController {
         return scheduleService.getAllSchedules(page-1, size, sortBy, isAsc);
     }
 
-    @PutMapping("/schedule/{scheduleId}")
-    public ScheduleResponseDto updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto scheduleRequestDto){
-        return scheduleService.updateSchedule(scheduleId, scheduleRequestDto);
+    @PutMapping("/schedule/{scheduleId}/user/{userId}")
+    public String updateSchedule(@PathVariable Long scheduleId, @PathVariable Long userId, @RequestBody ScheduleRequestDto scheduleRequestDto){
+        return scheduleService.updateSchedule(scheduleId, userId, scheduleRequestDto);
     }
 
     // 일정을 작성한 유저는 추가로 일정 담당 유저들을 배치 할 수 있음으로
@@ -48,8 +48,8 @@ public class ScheduleController {
     }
 
 
-    @DeleteMapping("/schedule/{scheduleId}")
-    public Long delete(@PathVariable Long scheduleId){
-        return scheduleService.deleteSchedule(scheduleId);
+    @DeleteMapping("/schedule/{scheduleId}/user/{userId}")
+    public String delete(@PathVariable Long scheduleId, @PathVariable Long userId){
+        return scheduleService.deleteSchedule(scheduleId, userId);
     }
 }
