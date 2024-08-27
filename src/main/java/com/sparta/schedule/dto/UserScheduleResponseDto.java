@@ -1,25 +1,24 @@
 package com.sparta.schedule.dto;
 
-import com.sparta.schedule.entity.Comment;
 import com.sparta.schedule.entity.Schedule;
+import com.sparta.schedule.entity.User;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
-public class ScheduleResponseDto {
+public class UserScheduleResponseDto {
     private Long scheduleId;
     private String todoTitle;
     private String todoContents;
     private int commentCount;
-    private List<Comment> commentList;
+    private List<User> user;
 
-
-    public ScheduleResponseDto(Schedule schedule) {
+    public UserScheduleResponseDto(Schedule schedule, List<User> userScheduleList) {
         this.scheduleId = schedule.getScheduleId();
-        this.commentCount = schedule.getCommentCount();
         this.todoTitle = schedule.getTodoTitle();
         this.todoContents = schedule.getTodoContents();
-        this.commentList = schedule.getCommentList();
+        this.commentCount = schedule.getCommentCount();
+        this.user = userScheduleList;
     }
 }

@@ -2,6 +2,7 @@ package com.sparta.schedule.service;
 
 import com.sparta.schedule.dto.ScheduleRequestDto;
 import com.sparta.schedule.dto.ScheduleResponseDto;
+import com.sparta.schedule.dto.UserScheduleResponseDto;
 import com.sparta.schedule.entity.Schedule;
 import com.sparta.schedule.entity.User;
 import com.sparta.schedule.entity.UserSchedule;
@@ -9,6 +10,7 @@ import com.sparta.schedule.repository.ScheduleRepository;
 import com.sparta.schedule.repository.UserRepository;
 import com.sparta.schedule.repository.UserScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +18,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ScheduleService {
 
@@ -56,10 +62,23 @@ public class ScheduleService {
         return schedulesList.map(ScheduleResponseDto::new);
     }
 
-    public ScheduleResponseDto findOneSchedule(Long id) {
+    public UserScheduleResponseDto findOneSchedule(Long id) {
         Schedule schedule =scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("선택한 스케줄이 존재하지 않습니다."));
-        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
-        return scheduleResponseDto;
+        schedule.setCommentCount(schedule.getCommentList().size());
+        List<UserSchedule> userScheduleList = new ArrayList<>();
+
+        // schedule에 있는 list는 id만 가지고 있기 때문에 userScheduleRepository에서 id를 검색하여 찾아옵니다.
+        for (UserSchedule userSchedule : schedule.getUserScheduleList()) {
+            userScheduleList.add(userScheduleRepository.findById(userSchedule.getUserScheduleId()).orElseThrow(()-> new IllegalArgumentException("입력한 Id가 없습니다.")));
+        }
+
+        List<User> userList = new ArrayList<>();
+        for (UserSchedule userSchedule : userScheduleList) {
+            userList.add(userSchedule.getUser());
+        }
+
+        UserScheduleResponseDto userScheduleResponseDto = new UserScheduleResponseDto(schedule, userList);
+        return userScheduleResponseDto;
     }
 
     @Transactional
@@ -78,5 +97,32 @@ public class ScheduleService {
         Schedule schedule = findSchedule(scheduleId);
         scheduleRepository.delete(schedule);
         return scheduleId;
+    }
+
+    public UserScheduleResponseDto addUserInSchedule(Long userId, Long scheduleId, Long addUserId) {
+        Schedule schedule = findSchedule(scheduleId);
+        if(schedule.getUserScheduleList().get(0).getUser().getUserId() == userId) {
+            // user를 userId로 찾은 뒤 user에 저장
+            User user = userRepository.findById(addUserId).orElseThrow(()-> new IllegalArgumentException("찾는 id가 존재하지 않습니다."));
+
+            // userschedule과 User, Schedule에 각각 저장하기
+            UserSchedule userSchedule = new UserSchedule(user, schedule);
+            userScheduleRepository.save(userSchedule);
+            user.addUserScheduleList(userSchedule);
+
+            // schedule에도 추가해주기
+            schedule.addUserScheduleList(userSchedule);
+
+            List<User> userList = new ArrayList<>();
+            for (UserSchedule us : schedule.getUserScheduleList()) {
+                userList.add(us.getUser());
+            }
+
+            UserScheduleResponseDto userScheduleResponseDto = new UserScheduleResponseDto(schedule, userList);
+            return userScheduleResponseDto;
+        } else {
+            log.error("잘못된 입력입니다.");
+            return null;
+        }
     }
 }

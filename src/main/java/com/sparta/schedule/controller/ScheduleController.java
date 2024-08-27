@@ -2,6 +2,7 @@ package com.sparta.schedule.controller;
 
 import com.sparta.schedule.dto.ScheduleRequestDto;
 import com.sparta.schedule.dto.ScheduleResponseDto;
+import com.sparta.schedule.dto.UserScheduleResponseDto;
 import com.sparta.schedule.service.ScheduleService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedule/{scheduleId}")
-    public ScheduleResponseDto getSchedule(@PathVariable Long scheduleId){
+    public UserScheduleResponseDto getSchedule(@PathVariable Long scheduleId){
         return scheduleService.findOneSchedule(scheduleId);
     }
 
@@ -40,7 +41,11 @@ public class ScheduleController {
     }
 
     // 일정을 작성한 유저는 추가로 일정 담당 유저들을 배치 할 수 있음으로
-//    @PutMapping("/schedule/{scheduleId}")
+    // scheduleId와 userId(생성자인지 확인하기 위함), addUserId(user를 추가하기 위함)
+    @PutMapping("/schedule/{scheduleId}/{userId}/{addUserId}")
+    public UserScheduleResponseDto addUserInSchedule(@PathVariable Long userId, @PathVariable Long scheduleId, @PathVariable Long addUserId){
+        return scheduleService.addUserInSchedule(userId, scheduleId, addUserId);
+    }
 
 
     @DeleteMapping("/schedule/{scheduleId}")

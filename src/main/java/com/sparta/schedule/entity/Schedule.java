@@ -33,7 +33,7 @@ public class Schedule extends Timestamped{
     @JsonIgnore
     private List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<UserSchedule> userScheduleList = new ArrayList<>();
 
