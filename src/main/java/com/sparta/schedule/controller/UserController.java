@@ -26,11 +26,8 @@ public class UserController {
 
     @PostMapping("/user/login")
     public String login(@RequestBody LoginRequestDto requestDto, HttpServletResponse res) {
-        try {
-            userService.login(requestDto, res);
-        } catch (Exception e) {
-            return "로그인 실패: 401";
-        }
+        userService.login(requestDto, res);
+
         return "로그인 성공";
     }
 

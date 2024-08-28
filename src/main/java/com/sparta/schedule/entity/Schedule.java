@@ -20,6 +20,9 @@ public class Schedule extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scheduleId;
 
+    @Column(name="userId")
+    private Long userId;
+
     @Column(name="todoTitle", length = 100)
     private String todoTitle;
 

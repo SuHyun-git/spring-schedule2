@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ScheduleRequestDto {
     private Long scheduleId;
+    private Long userId;
     private String todoTitle;
     private String todoContents;
 }

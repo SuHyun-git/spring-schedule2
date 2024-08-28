@@ -4,6 +4,8 @@ import com.sparta.schedule.dto.CommentRequestDto;
 import com.sparta.schedule.dto.CommentResponseDto;
 import com.sparta.schedule.entity.Comment;
 import com.sparta.schedule.entity.Schedule;
+import com.sparta.schedule.exception.CanNotFindEmail;
+import com.sparta.schedule.exception.CanNotFindSchedule;
 import com.sparta.schedule.repository.CommentRepository;
 import com.sparta.schedule.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,7 @@ public class CommentService {
 
     public CommentResponseDto createComment(Long scheduleId,CommentRequestDto commentRequestDto) {
         Comment comment = new Comment(commentRequestDto);
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(()-> new IllegalArgumentException("선택한 스케줄이 존재하지 않습니다."));
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(()-> new CanNotFindSchedule());
         comment.setSchedule(schedule);
         Comment saveComment = commentRepository.save(comment);
 
@@ -46,7 +48,7 @@ public class CommentService {
 
 
     public Comment findComment(Long commentId) {
-        return commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException("선택한 id가 존재하지 않습니다."));
+        return commentRepository.findById(commentId).orElseThrow(()-> new CanNotFindEmail());
     }
 
 

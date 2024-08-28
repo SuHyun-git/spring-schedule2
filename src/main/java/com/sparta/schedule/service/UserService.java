@@ -6,6 +6,9 @@ import com.sparta.schedule.dto.UserRequestDto;
 import com.sparta.schedule.dto.UserResponseDto;
 import com.sparta.schedule.entity.User;
 import com.sparta.schedule.entity.UserRoleEnum;
+import com.sparta.schedule.exception.CanNotFindEmail;
+import com.sparta.schedule.exception.CanNotFindId;
+import com.sparta.schedule.exception.CanNotFindPassword;
 import com.sparta.schedule.jwt.JwtUtil;
 import com.sparta.schedule.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -62,7 +65,7 @@ public class  UserService {
     }
 
     public User findUser(Long userId){
-        return userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("선택한 id는 존재하지 않습니다."));
+        return userRepository.findById(userId).orElseThrow(()->new CanNotFindId());
     }
 
     public List<UserResponseDto> findAllUsers() {
@@ -81,11 +84,11 @@ public class  UserService {
         String password = requestDto.getPassword();
 
         // 사용자 확인
-        User user = userRepository.findByEmail(email).orElseThrow(()->new IllegalArgumentException("선택한 id는 존재하지 않습니다."));
+        User user = userRepository.findByEmail(email).orElseThrow(()->new CanNotFindEmail());
 
         // 비밀번호 확인
         if(!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new CanNotFindPassword();
         }
 
         // JWT 생성 및 쿠키에 저장 후 쿠키에 추가
