@@ -11,6 +11,7 @@ public class ScheduleResponseDto {
     private Long scheduleId;
     private String todoTitle;
     private String todoContents;
+    private String weather;
     private int commentCount;
     private List<Comment> commentList;
 

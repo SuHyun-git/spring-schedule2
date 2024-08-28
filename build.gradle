@@ -37,6 +37,8 @@ dependencies {
 
 	implementation 'at.favre.lib:bcrypt:0.10.2'
 
+	// JSON
+	implementation 'org.json:json:20190722'
 	// Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 

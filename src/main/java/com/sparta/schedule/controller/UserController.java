@@ -29,7 +29,7 @@ public class UserController {
         try {
             userService.login(requestDto, res);
         } catch (Exception e) {
-            return "로그인 실패";
+            return "로그인 실패: 401";
         }
         return "로그인 성공";
     }

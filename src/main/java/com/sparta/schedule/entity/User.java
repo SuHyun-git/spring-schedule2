@@ -29,7 +29,7 @@ public class User extends Timestamped {
     @Column(name = "email", length = 100, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 

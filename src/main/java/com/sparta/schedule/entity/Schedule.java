@@ -29,6 +29,9 @@ public class Schedule extends Timestamped{
     @Column(name = "commentCount")
     private int commentCount;
 
+    @Column(name = "weather")
+    private String weather;
+
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     private List<Comment> commentList = new ArrayList<>();
@@ -48,10 +51,11 @@ public class Schedule extends Timestamped{
         userSchedule.setSchedule(this);
     }
 
-    public Schedule(ScheduleRequestDto scheduleRequestDto) {
+    public Schedule(ScheduleRequestDto scheduleRequestDto, String weather) {
         this.scheduleId = scheduleRequestDto.getScheduleId();
         this.todoTitle = scheduleRequestDto.getTodoTitle();
         this.todoContents = scheduleRequestDto.getTodoContents();
+        this.weather = weather;
     }
 
     public Schedule update(ScheduleRequestDto scheduleRequestDto) {
